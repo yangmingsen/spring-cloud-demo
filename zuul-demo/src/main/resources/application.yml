@@ -1,0 +1,27 @@
+server:
+  port: 10010 #服务端口
+spring:
+  application:
+    name: api-gateway #指定服务名
+
+eureka:
+  client:
+    service-url: # EurekaServer地址
+      defaultZone: http://127.0.0.1:10086/eureka
+    fetch-registry: true #，如果为true，则会从Eureka Server服务的列表只读备份，然后缓存在本地
+    registry-fetch-interval-seconds: 5 #`每隔5秒`会重新获取并更新数据
+  instance:
+    prefer-ip-address: true # 当其它服务获取地址时提供ip而不是hostname
+    ip-address: 127.0.0.1 # 指定自己的ip信息，不指定的话会自己寻找
+
+zuul:
+  routes:
+    user-service: # 这里是路由id，随意写
+      path: /user-service/** # 这里是映射路径
+      #serviceId: user-service # 指定服务名称
+      serviceId: user-service
+      #url: http://127.0.0.1:8081, # 映射路径对应的实际url地址 （但是这是硬编码,如果是集群就不好了）
+      #因为已经有了Eureka客户端，我们可以从Eureka获取服务的地址信息，因此映射时无需指定IP地址，而是通过服务名称来访问，而且Zuul已经集成了Ribbon的负载均衡功能。
+
+
+
